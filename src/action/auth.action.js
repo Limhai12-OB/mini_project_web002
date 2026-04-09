@@ -9,7 +9,7 @@ export async function loginAction(data) {
   const res = signIn("credentials", {
     email,
     password,
-    redirectTo: "/",
+    redirectTo: "/products",
   });
   if (res && res.error) {
     throw new Error("Error");

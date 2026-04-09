@@ -10,12 +10,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
+        const email = credentials?.email?.toString().trim();
+        const password = credentials?.password?.toString();
+
+        if (!email || !password) {
+          return null;
+        }
+
         try {
-          const user = await loginService(credentials);
-          console.log("this is user in auth :", user);
-          return user.payload;
+          const user = await loginService({ email, password });
+          return user;
         } catch (error) {
-          console.error("Internal Auth Error:", error);
+          console.error("Auth authorize failed:", error);
           return null;
         }
       },
@@ -31,16 +37,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
-        token.user = user;
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.token = user.token;
       }
-      console.log("this is token :", token);
       return token;
     },
     session: async ({ session, token }) => {
-      if (token && token.user) {
-        session.user = token.user;
-      }
-      console.log("this is session : ", session);
+      session.user = {
+        id: token.id,
+        email: token.email,
+        name: token.name,
+        token: token.token,
+      };
       return session;
     },
   },

@@ -75,9 +75,7 @@ export default function Home() {
             Shop now
           </Link>
         </div>
-      </section>
-
-      {/* <LandingDiscountTicker /> */}
+      </section> 
 
       <section className="mx-auto w-full max-w-7xl py-14 text-center text-sm text-gray-500">
         <p>

@@ -1,7 +1,7 @@
 "use client";
 
-import { loginAction } from "@/action/auth.action";
 import { Button } from "@heroui/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,10 +19,34 @@ export default function LoginFormComponent() {
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
-    console.log("cliend" , formData)
-    await loginAction(formData); 
-  }
-      
+    setSubmitError("");
+
+    try {
+      const result = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (!result) {
+        setSubmitError("No response from server");
+      } else if (result.error) {
+        setSubmitError(
+          result.error === "CredentialsSignin"
+            ? "Invalid email or password"
+            : "Login failed. Please try again.",
+        );
+      } else {
+        router.replace(result.url || "/");
+        router.refresh();
+      }
+    } catch (error) {
+      setSubmitError("Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="w-full rounded-2xl border border-gray-100 bg-white p-8 shadow-lg shadow-gray-200/60 sm:p-10">
@@ -39,7 +63,7 @@ export default function LoginFormComponent() {
             id="login-email"
             type="email"
             autoComplete="email"
-            {...register("email")}
+            {...register("email", { required: "Email is required" })}
             className="mt-1.5 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none ring-lime-400/20 focus:border-lime-400 focus:ring-2"
             placeholder="you@example.com"
           />
@@ -58,7 +82,7 @@ export default function LoginFormComponent() {
             id="login-password"
             type="password"
             autoComplete="current-password"
-            {...register("password")}
+            {...register("password", { required: "Password is required" })}
             className="mt-1.5 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none ring-lime-400/20 focus:border-lime-400 focus:ring-2"
             placeholder="••••••••"
           />
