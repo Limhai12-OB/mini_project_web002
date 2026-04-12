@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-function ProductIcon({ className, variant }) {
-  // Simple inline SVG icons (no external assets needed).
+function ProductIcon({ className, variant }) { 
   if (variant === "bottle") {
     return (
       <svg
@@ -75,9 +74,7 @@ function ProductIcon({ className, variant }) {
         <path d="M20 14l.6 3.1L24 18l-3.4.9L20 22l-.6-3.1L16 18l3.4-.9L20 14Z" />
       </svg>
     );
-  }
-
-  // fallback: drop
+  } 
   return (
     <svg
       viewBox="0 0 24 24"
@@ -98,8 +95,7 @@ export default function AuthLayout({ children }) {
   return (
     <main className="flex-1">
       <div className="relative mx-auto flex min-h-full max-w-7xl items-center justify-center px-4 py-12 sm:py-16">
-        <div className="relative w-full max-w-md">
-          {/* Decorative product icons */}
+        <div className="relative w-full max-w-md"> 
           <div className="pointer-events-none absolute -left-8 -top-8 text-lime-500/90">
             <ProductIcon className="size-14" variant="bottle" />
           </div>
@@ -132,9 +128,7 @@ export default function AuthLayout({ children }) {
             <p className="mt-3 text-sm text-gray-500">
               Demo login & register experience (no backend).
             </p>
-          </div>
-
-          {/* Centered form card comes from the route page */}
+          </div> 
           <div>{children}</div>
         </div>
       </div>

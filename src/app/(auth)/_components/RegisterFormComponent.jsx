@@ -69,9 +69,7 @@ export default function RegisterFormComponent() {
         <p className="rounded-xl border border-lime-200 bg-lime-50 px-3 py-2 text-sm text-lime-700">
           {submitSuccess}
         </p>
-      )}
-
-      {/* First Name */}
+      )} 
       <div>
         <label className="block text-sm font-medium text-gray-700">First name</label>
         <input
@@ -83,9 +81,7 @@ export default function RegisterFormComponent() {
         {errors.firstName && (
           <p className="mt-1 text-sm text-red-500">{errors.firstName.message}</p>
         )}
-      </div>
-
-      {/* Last Name */}
+      </div> 
       <div>
         <label className="block text-sm font-medium text-gray-700">Last name</label>
         <input
@@ -97,9 +93,7 @@ export default function RegisterFormComponent() {
         {errors.lastName && (
           <p className="mt-1 text-sm text-red-500">{errors.lastName.message}</p>
         )}
-      </div>
-
-      {/* Email */}
+      </div> 
       <div>
         <label className="block text-sm font-medium text-gray-700">Email</label>
         <input
@@ -109,9 +103,7 @@ export default function RegisterFormComponent() {
           className="mt-1.5 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none ring-lime-400/20 focus:border-lime-400 focus:ring-2"
         />
         {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
-      </div>
-
-      {/* Password */}
+      </div> 
       <div>
         <label className="block text-sm font-medium text-gray-700">
           Password
@@ -131,9 +123,7 @@ export default function RegisterFormComponent() {
         {errors.password && (
           <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
         )}
-      </div>
-
-      {/* Birthdate */}
+      </div> 
       <div>
         <label className="block text-sm font-medium text-gray-700">
           Birthdate

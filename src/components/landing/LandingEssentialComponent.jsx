@@ -8,6 +8,7 @@ import {
   products,
 } from "../../data/mockData";
 import ProductCardComponent from "../ProductCardComponent";
+import { useSession } from "next-auth/react";
 
 const PAGE_SIZE = 8;
 
@@ -18,6 +19,8 @@ export default function LandingEssentialsGrid() {
   const filtered = filterProductsByEssentialsTab(products, tab);
   const visible = showAll ? filtered : filtered.slice(0, PAGE_SIZE);
   const canLoadMore = !showAll && filtered.length > PAGE_SIZE;
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
 
   return (
     <section id="shop" className="mx-auto w-full max-w-7xl py-16 lg:py-20">
@@ -26,7 +29,8 @@ export default function LandingEssentialsGrid() {
           Our skincare essentials
         </h2>
         <p className="mt-2 max-w-lg text-gray-500">
-          Filter by routine step — same mock catalog, organized for quick discovery.
+          Filter by routine step — same mock catalog, organized for quick
+          discovery.
         </p>
       </div>
 
@@ -57,17 +61,22 @@ export default function LandingEssentialsGrid() {
           );
         })}
       </div>
-
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-        {visible.map((product, index) => (
-          <ProductCardComponent product={product} key={index}/>
-        ))}
+        {isAuthenticated ? (
+          visible.map((product, index) => (
+            <ProductCardComponent product={product} key={index} />
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full w-full">
+            <p className="text-gray-500 text-center">no products loaded</p>
+          </div>
+        )}
       </div>
-
       {filtered.length === 0 && (
-        <p className="mt-12 text-center text-gray-500">No products in this tab — try “All”.</p>
+        <p className="mt-12 text-center text-gray-500">
+          No products in this tab — try “All”.
+        </p>
       )}
-
       {canLoadMore && (
         <div className="mt-12 flex justify-center">
           <Button

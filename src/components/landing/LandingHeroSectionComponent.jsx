@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function LandingHeroSectionComponent({ miniProducts }) {
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
   return (
     <section className="relative overflow-hidden bg-white">
       <div className="mx-auto grid w-full max-w-7xl gap-10 py-14 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-20">
@@ -41,7 +44,9 @@ export default function LandingHeroSectionComponent({ miniProducts }) {
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
               Our best sellers
             </p>
-            <div className="mt-3 flex gap-2">
+            {/* check */}
+            {isAuthenticated ? (
+              <div className="mt-3 flex gap-2">
               {miniProducts.map((p) => (
                 <Link
                   key={p.productId}
@@ -64,6 +69,12 @@ export default function LandingHeroSectionComponent({ miniProducts }) {
                 </Link>
               ))}
             </div>
+            ) : (
+              <div>
+               
+              </div>
+            )}
+            
           </div>
         </div>
       </div>

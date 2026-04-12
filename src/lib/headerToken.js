@@ -1,10 +1,15 @@
-import { getSession } from "next-auth/react";
+import { auth } from "../auth";
 
 export default async function headerToken() {
-  const session = await getSession();
-
-  return {
+  const session = await auth();
+  const token = session?.user?.token;
+  console.log("Token being used:", token ? "Found " : "Not Found ");
+  const header = {
+    Accept: "application/json",
     "Content-Type": "application/json",
-    Authorization: `Bearer ${session?.user?.token}`,
   };
+  if (token) {
+    header["Authorization"] = `Bearer ${token}`;
+  }
+  return header;
 }
