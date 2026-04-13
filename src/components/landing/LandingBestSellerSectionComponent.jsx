@@ -3,11 +3,11 @@
 import React from "react";
 import ProductCardComponent from "../ProductCardComponent";
 import { useSession } from "next-auth/react";
-import { div } from "framer-motion/client";
 
 export default function LandingBestSellerSectionComponent({ items }) {
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
+
   return (
     <section className="mx-auto w-full max-w-7xl py-16 lg:py-20">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -23,13 +23,13 @@ export default function LandingBestSellerSectionComponent({ items }) {
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
         {isAuthenticated ? (
           items.map((product, index) => (
-            <div>
-              <p>pro</p>
-              <ProductCardComponent product={product} key={index} />
-            </div>
+            <ProductCardComponent
+              product={product}
+              key={product.productId ?? index}
+            />
           ))
         ) : (
-          <div className="flex justify-center items-center h-full w-full">
+          <div className="col-span-full flex justify-center items-center h-40">
             <p className="text-gray-500 text-center">no products to show</p>
           </div>
         )}

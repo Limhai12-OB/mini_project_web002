@@ -4,6 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import ButtonAddComponent from "./ButtonAddComponent";
 
+function isValidImageSrc(url) {
+  if (url == null) return false;
+  const s = String(url).trim();
+  if (!s || s.toLowerCase() === "string") return false;
+  if (s.startsWith("/")) return true;
+  try {
+    const u = new URL(s);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export function StarRow({ rating = 4.8 }) {
   return (
     <p
@@ -17,15 +30,16 @@ export function StarRow({ rating = 4.8 }) {
 }
 
 export default function ProductCardComponent({ product }) {
-  const { productId, productName, price, imageUrl } = product;
+  const { productId, name, price, imageUrl } = product;
+  const safeImageSrc = isValidImageSrc(imageUrl) ? imageUrl.trim() : null;
 
   return (
     <article className="group relative rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md">
       <Link href={`/products/${productId}`} className="block">
         <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
-          {imageUrl ? (
+          {safeImageSrc ? (
             <Image
-              src={imageUrl}
+              src={safeImageSrc}
               alt=""
               fill
               sizes="(max-width: 768px) 50vw, 25vw"
@@ -42,7 +56,7 @@ export default function ProductCardComponent({ product }) {
         <StarRow />
         <Link href={`/products/${productId}`}>
           <h3 className="mt-1 line-clamp-2 text-sm font-semibold text-gray-900 hover:text-lime-700">
-            {productName}
+            {name}
           </h3>
         </Link>
         <p className="mt-2 text-base font-semibold tabular-nums text-gray-900">

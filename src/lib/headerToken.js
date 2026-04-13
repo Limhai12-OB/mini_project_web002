@@ -1,9 +1,18 @@
 import { auth } from "../auth";
 
+function normalizeApiToken(raw) {
+  if (raw == null) return null;
+  const s = String(raw).trim();
+  if (!s) return null;
+  if (s.toLowerCase().startsWith("bearer ")) {
+    return s.slice(7).trim();
+  }
+  return s;
+}
+
 export default async function headerToken() {
   const session = await auth();
-  const token = session?.user?.token;
-  console.log("Token being used:", token ? "Found " : "Not Found ");
+  const token = normalizeApiToken(session?.user?.token);
   const header = {
     Accept: "application/json",
     "Content-Type": "application/json",

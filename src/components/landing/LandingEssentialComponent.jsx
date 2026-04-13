@@ -1,26 +1,116 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@heroui/react";
-import {
-  ESSENTIALS_TABS,
-  filterProductsByEssentialsTab,
-  products,
-} from "../../data/mockData";
 import ProductCardComponent from "../ProductCardComponent";
-import { useSession } from "next-auth/react";
 
 const PAGE_SIZE = 8;
 
-export default function LandingEssentialsGrid() {
+const CATEGORY_WANTED = ["skincare", "beer"];
+
+function toCardProduct(p) {
+  return {
+    ...p,
+    productId: p.productId,
+    name: p.name ?? p.productName ?? "Product",
+    price: p.price,
+    imageUrl: p.imageUrl ?? p.image ?? null,
+  };
+}
+
+export default function LandingEssentialsGrid({ products = [] }) {
   const [tab, setTab] = useState("All");
   const [showAll, setShowAll] = useState(false);
+  const [categoryMap, setCategoryMap] = useState({});
+  const [activeProducts, setActiveProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const filtered = filterProductsByEssentialsTab(products, tab);
+  const list = useMemo(
+    () => (Array.isArray(products) ? products : []),
+    [products],
+  );
+
+  const tabs = useMemo(() => {
+    const keys = Object.keys(categoryMap);
+    return ["All", ...keys.map((k) => categoryMap[k]?.label ?? k)];
+  }, [categoryMap]);
+
+  useEffect(() => {
+    setActiveProducts(list);
+  }, [list]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadCategories() {
+      try {
+        const res = await fetch("/api/categories", { cache: "no-store" });
+        const data = await res.json();
+        const payload = Array.isArray(data?.payload) ? data.payload : [];
+
+        const picked = {};
+        for (const c of payload) {
+          const label = String(c?.name ?? "").trim();
+          const id = String(c?.categoryId ?? "").trim();
+          if (!label || !id) continue;
+          const key = label.toLowerCase();
+          if (!CATEGORY_WANTED.includes(key)) continue;
+          picked[key] = { label, id };
+        }
+
+        if (!cancelled) setCategoryMap(picked);
+      } catch {
+        if (!cancelled) setCategoryMap({});
+      }
+    }
+
+    loadCategories();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProductsByCategory(categoryKey) {
+      const entry = categoryMap[categoryKey];
+      if (!entry?.id) return;
+
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/categories/${entry.id}/products`, {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        const payload = Array.isArray(data?.payload) ? data.payload : [];
+        if (!cancelled) setActiveProducts(payload);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    if (tab === "All") {
+      setActiveProducts(list);
+      return;
+    }
+
+    const categoryKey = tab.toLowerCase();
+    if (categoryMap[categoryKey]) {
+      loadProductsByCategory(categoryKey);
+    } else {
+      // If we somehow don't have an id, show empty list instead of incorrect data.
+      setActiveProducts([]);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [tab, categoryMap, list]);
+
+  const filtered = activeProducts;
   const visible = showAll ? filtered : filtered.slice(0, PAGE_SIZE);
   const canLoadMore = !showAll && filtered.length > PAGE_SIZE;
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
 
   return (
     <section id="shop" className="mx-auto w-full max-w-7xl py-16 lg:py-20">
@@ -29,8 +119,7 @@ export default function LandingEssentialsGrid() {
           Our skincare essentials
         </h2>
         <p className="mt-2 max-w-lg text-gray-500">
-          Filter by routine step — same mock catalog, organized for quick
-          discovery.
+          Browse the full catalog — filter by category to narrow things down.
         </p>
       </div>
 
@@ -39,7 +128,7 @@ export default function LandingEssentialsGrid() {
         role="tablist"
         aria-label="Product categories"
       >
-        {ESSENTIALS_TABS.map((label) => {
+        {tabs.map((label) => {
           const on = tab === label;
           return (
             <Button
@@ -62,19 +151,28 @@ export default function LandingEssentialsGrid() {
         })}
       </div>
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-        {isAuthenticated ? (
-          visible.map((product, index) => (
-            <ProductCardComponent product={product} key={index} />
-          ))
-        ) : (
-          <div className="flex justify-center items-center h-full w-full">
-            <p className="text-gray-500 text-center">no products loaded</p>
+        {loading ? (
+          <div className="col-span-full flex h-40 items-center justify-center">
+            <p className="text-center text-gray-500">Loading products...</p>
           </div>
+        ) : filtered.length === 0 ? (
+          <div className="col-span-full flex h-40 items-center justify-center">
+            <p className="text-center text-gray-500">
+              No products loaded yet.
+            </p>
+          </div>
+        ) : (
+          visible.map((product, index) => (
+            <ProductCardComponent
+              product={toCardProduct(product)}
+              key={product.productId ?? index}
+            />
+          ))
         )}
       </div>
-      {filtered.length === 0 && (
+      {tab !== "All" && !loading && filtered.length === 0 && (
         <p className="mt-12 text-center text-gray-500">
-          No products in this tab — try “All”.
+          No products in this category — try &quot;All&quot;.
         </p>
       )}
       {canLoadMore && (

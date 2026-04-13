@@ -4,16 +4,20 @@ import { categories, products } from "../../data/mockData";
 import LandingHeroSectionComponent from "../../components/landing/LandingHeroSectionComponent";
 import LandingBestSellerSectionComponent from "../../components/landing/LandingBestSellerSectionComponent";
 import LandingEssentialComponent from "../../components/landing/LandingEssentialComponent";
+import { getBestSelling } from "../../service/bestSelling.service";
+import { getProduct } from "../../service/product.service";
 
 const bestSellers = products.slice(0, 4);
 const heroStrip = products.slice(0, 3);
 
 export default async function Home() {
+  const bestSellers = await getBestSelling();
+  const catalogProducts = await getProduct();
   return (
     <div className="bg-[#fafafa]">
       <LandingHeroSectionComponent miniProducts={heroStrip} />
       <LandingBestSellerSectionComponent items={bestSellers} />
-      <LandingEssentialComponent />
+      <LandingEssentialComponent products={catalogProducts} />
 
       <section className="mx-auto w-full max-w-7xl py-16 lg:py-20">
         <div className="grid gap-4 md:grid-cols-3">
@@ -83,7 +87,7 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>  
+      </section>
       <section className="bg-teal-950 py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-0 text-center">
           <h2 className="text-3xl font-semibold leading-tight text-lime-300 sm:text-4xl lg:text-5xl">
@@ -100,7 +104,7 @@ export default async function Home() {
             Shop now
           </Link>
         </div>
-      </section> 
+      </section>
       <section className="mx-auto w-full max-w-7xl py-14 text-center text-sm text-gray-500">
         <p>
           Explore{" "}
