@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { StarRow } from "../ProductCardComponent";
-import { div } from "framer-motion/client";
 
 export default function ShopCardComponent({ product }) {
   const { price, name, productId, description, imageUrl } = product;
 
   return (
-      <article className="group w-75 flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <article className="group w-full flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
         <div className="relative aspect-square overflow-hidden">
           <Image
             src={

@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
-export default function LandingHeroSectionComponent({ miniProducts }) {
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
+export default function LandingHeroSectionComponent({
+  miniProducts = [],
+  products = [],
+}) {
+  const heroProduct = Array.isArray(products) && products.length > 0 ? products[0] : null;
+  const imageUrl = heroProduct?.imageUrl ?? null;
   return (
     <section className="relative overflow-hidden bg-white">
       <div className="mx-auto grid w-full max-w-7xl gap-10 py-14 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-20">
@@ -31,22 +33,22 @@ export default function LandingHeroSectionComponent({ miniProducts }) {
 
         <div className="relative lg:min-h-112">
           <div className="relative aspect-4/5 overflow-hidden rounded-2xl bg-gray-100 shadow-lg lg:aspect-auto lg:h-[min(36rem,70vh)]">
-            <Image
-              src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=900&h=1100&fit=crop"
+             {imageUrl && (
+              <Image
+              src={"https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=900&h=1100&fit=crop"}
               alt=""
               fill
               priority
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
+            )}
           </div>
           <div className="absolute -bottom-4 left-4 right-4 rounded-2xl border border-gray-100 bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:left-auto sm:right-6 sm:w-72 lg:-left-6 lg:bottom-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
               Our best sellers
             </p>
-            {/* check */}
-            {isAuthenticated ? (
-              <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex gap-2">
               {miniProducts.map((p) => (
                 <Link
                   key={p.productId}
@@ -69,12 +71,6 @@ export default function LandingHeroSectionComponent({ miniProducts }) {
                 </Link>
               ))}
             </div>
-            ) : (
-              <div>
-               
-              </div>
-            )}
-            
           </div>
         </div>
       </div>

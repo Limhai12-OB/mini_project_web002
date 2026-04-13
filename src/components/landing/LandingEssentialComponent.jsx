@@ -95,8 +95,7 @@ export default function LandingEssentialsGrid({ products = [] }) {
     const categoryKey = tab.toLowerCase();
     if (categoryMap[categoryKey]) {
       loadProductsByCategory(categoryKey);
-    } else {
-      // If we somehow don't have an id, show empty list instead of incorrect data.
+    } else { 
       setActiveProducts([]);
     }
 

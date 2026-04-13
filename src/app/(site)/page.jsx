@@ -7,15 +7,16 @@ import LandingEssentialComponent from "../../components/landing/LandingEssential
 import { getBestSelling } from "../../service/bestSelling.service";
 import { getProduct } from "../../service/product.service";
 
-const bestSellers = products.slice(0, 4);
 const heroStrip = products.slice(0, 3);
 
 export default async function Home() {
-  const bestSellers = await getBestSelling();
+  const fetchedBestSellers = await getBestSelling();
   const catalogProducts = await getProduct();
+  const bestSellers = fetchedBestSellers.length > 0 ? fetchedBestSellers : products.slice(0, 4);
+  const heroProducts = bestSellers.length > 0 ? bestSellers.slice(0, 3) : heroStrip;
   return (
     <div className="bg-[#fafafa]">
-      <LandingHeroSectionComponent miniProducts={heroStrip} />
+      <LandingHeroSectionComponent miniProducts={heroProducts} products={bestSellers} />
       <LandingBestSellerSectionComponent items={bestSellers} />
       <LandingEssentialComponent products={catalogProducts} />
 
