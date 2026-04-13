@@ -6,8 +6,6 @@ import ProductCardComponent from "../ProductCardComponent";
 
 const PAGE_SIZE = 8;
 
-const CATEGORY_WANTED = ["skincare", "beer"];
-
 function toCardProduct(p) {
   return {
     ...p,
@@ -54,7 +52,6 @@ export default function LandingEssentialsGrid({ products = [] }) {
           const id = String(c?.categoryId ?? "").trim();
           if (!label || !id) continue;
           const key = label.toLowerCase();
-          if (!CATEGORY_WANTED.includes(key)) continue;
           picked[key] = { label, id };
         }
 

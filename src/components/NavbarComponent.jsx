@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@heroui/react";
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-// import { useCart } from "@/store/cartStore";
+import Image from "next/image"; 
 
 const centerLinks = [
   { href: "/", label: "Home" },
@@ -61,11 +60,7 @@ export default function NavbarComponent() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
-  //   const { totalQuantity } = useCart();
-
-  //   const cartLabel =
-  //     totalQuantity > 0 ? `Shopping cart, ${totalQuantity} items` : "Shopping cart";
+  const isAuthenticated = status === "authenticated"; 
 
   const linkClass = (active) =>
     `relative flex items-center rounded-full px-3 py-2 text-sm font-medium transition ${
@@ -93,8 +88,7 @@ export default function NavbarComponent() {
                 key={href + label}
                 href={href}
                 className={linkClass(active)}
-              >
-                {/* <Link key={href + label} href={href}> */}
+              > 
                 {badge && (
                   <span className="absolute -top-2 z-20 left-1/2 -translate-x-1/2 rounded-full bg-lime-400 px-1.5 py-px text-[9px] font-bold uppercase tracking-wide text-gray-900">
                     {badge}
@@ -147,24 +141,14 @@ export default function NavbarComponent() {
             )}
           </div>
           <Link
-            href="/cart"
-            // aria-label={cartLabel}
-            // title={cartLabel}
+            href="/cart" 
             className={`relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition ${
               pathname === "/cart"
                 ? "border-lime-500 bg-lime-400 text-gray-900"
                 : "border-gray-200 text-gray-700 hover:border-lime-300 hover:bg-lime-50"
             }`}
           >
-            <CartBagIcon className="size-5" />
-            {/* <span
-              className={`absolute -right-0.5 -top-0.5 flex min-h-4.5 min-w-4.5 items-center justify-center rounded-full bg-teal-900 px-1 text-[10px] font-semibold leading-none text-lime-300 tabular-nums transition-opacity ${
-                totalQuantity > 0 ? "opacity-100" : "pointer-events-none opacity-0"
-              }`}
-              aria-hidden
-            >
-              {totalQuantity > 99 ? "99+" : totalQuantity}
-            </span> */}
+            <CartBagIcon className="size-5" /> 
           </Link>
 
           <Button
@@ -230,8 +214,7 @@ export default function NavbarComponent() {
               href="/cart"
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
-            >
-              {/* Cart {totalQuantity > 0 ? `(${totalQuantity})` : ""} */}
+            > 
             </Link>
           </div>
         </div>

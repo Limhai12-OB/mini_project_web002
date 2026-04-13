@@ -7,7 +7,6 @@ export default function ShopCardComponent({ product }) {
   const { price, name, productId, description, imageUrl } = product;
 
   return (
-    <div className="flex flex-wrap gap-6 mt-16 mb-16 ml-8">
       <article className="group w-75 flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
         <div className="relative aspect-square overflow-hidden">
           <Image
@@ -42,6 +41,5 @@ export default function ShopCardComponent({ product }) {
           </Link>
         </div>
       </article>
-    </div>
   );
 }
