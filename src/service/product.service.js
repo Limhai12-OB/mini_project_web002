@@ -24,7 +24,6 @@ export async function getProduct() {
 
     const data = await res.json();
 
-
     return data.payload || [];
   } catch (err) {
     console.error("Fetch Error:", err);
@@ -41,7 +40,10 @@ export async function getProductsByCategoryId(categoryId) {
       return [];
     }
     const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
-    const url = new URL(`categories/${categoryId}/products`, normalizedBase).toString();
+    const url = new URL(
+      `categories/${categoryId}/products`,
+      normalizedBase,
+    ).toString();
     const res = await fetch(url, {
       method: "GET",
       headers: header,
@@ -56,5 +58,35 @@ export async function getProductsByCategoryId(categoryId) {
   } catch (err) {
     console.error("Fetch Error:", err);
     return [];
+  }
+}
+
+export async function getProductById(productId) {
+  const header = await headerToken();
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+    const detailUrl = new URL(
+      `products/${productId}`,
+      normalizedBase,
+    ).toString();
+    const detailResponse = await fetch(detailUrl, {
+      method: "GET",
+      headers: header,
+      cache: "no-store",
+    });
+
+    if (detailResponse.ok) {
+      const detailData = await detailResponse.json();
+      return detailData?.payload ?? null;
+    }
+
+    const allProducts = await getProduct();
+    return allProducts.find(
+      (item) => String(item?.productId) === String(productId),
+    );
+  } catch (err) {
+    console.error("Fetch Error: ", err);
+    return null;
   }
 }

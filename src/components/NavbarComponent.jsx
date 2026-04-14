@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@heroui/react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image"; 
+import { useCart } from "./cart/cart-context";
 
 const centerLinks = [
   { href: "/", label: "Home" },
@@ -61,6 +62,7 @@ export default function NavbarComponent() {
   const [open, setOpen] = useState(false);
   const { status } = useSession();
   const isAuthenticated = status === "authenticated"; 
+  const { totalQuantity } = useCart();
 
   const linkClass = (active) =>
     `relative flex items-center rounded-full px-3 py-2 text-sm font-medium transition ${
@@ -149,6 +151,11 @@ export default function NavbarComponent() {
             }`}
           >
             <CartBagIcon className="size-5" /> 
+            {totalQuantity > 0 && (
+              <span className="absolute -right-1 -top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-indigo-900 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                {totalQuantity}
+              </span>
+            )}
           </Link>
 
           <Button
