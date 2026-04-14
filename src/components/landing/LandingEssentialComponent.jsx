@@ -95,7 +95,7 @@ export default function LandingEssentialsGrid({ products = [] }) {
     const categoryKey = tab.toLowerCase();
     if (categoryMap[categoryKey]) {
       loadProductsByCategory(categoryKey);
-    } else { 
+    } else {
       setActiveProducts([]);
     }
 
@@ -117,6 +117,7 @@ export default function LandingEssentialsGrid({ products = [] }) {
         <p className="mt-2 max-w-lg text-gray-500">
           Browse the full catalog — filter by category to narrow things down.
         </p>
+        {/*  */}
       </div>
 
       <div
@@ -153,9 +154,7 @@ export default function LandingEssentialsGrid({ products = [] }) {
           </div>
         ) : filtered.length === 0 ? (
           <div className="col-span-full flex h-40 items-center justify-center">
-            <p className="text-center text-gray-500">
-              No products loaded yet.
-            </p>
+            <p className="text-center text-gray-500">No products loaded yet.</p>
           </div>
         ) : (
           visible.map((product, index) => (
