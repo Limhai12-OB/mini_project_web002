@@ -18,6 +18,9 @@ export async function getProduct() {
     });
 
     if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        return [];
+      }
       console.error(`Fetch failed with status: ${res.status}`);
       return [];
     }
@@ -50,6 +53,9 @@ export async function getProductsByCategoryId(categoryId) {
       cache: "no-store",
     });
     if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        return [];
+      }
       console.error(`Fetch failed with status: ${res.status}`);
       return [];
     }

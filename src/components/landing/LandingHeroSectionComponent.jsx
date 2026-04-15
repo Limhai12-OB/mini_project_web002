@@ -3,6 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
+function isValidImageUrl(value) {
+  if (value == null) return false;
+  const s = String(value).trim();
+  if (!s || s.toLowerCase() === "string") return false;
+  if (s.startsWith("/")) return true;
+  return /^https?:\/\//i.test(s);
+}
+
 export default function LandingHeroSectionComponent({
   miniProducts = [],
   products = [],
@@ -55,7 +63,7 @@ export default function LandingHeroSectionComponent({
                   href={`/products/${p.productId}`}
                   className="relative size-14 overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-100"
                 >
-                  {p.imageUrl ? (
+                  {isValidImageUrl(p.imageUrl) ? (
                     <Image
                       src={p.imageUrl}
                       alt=""

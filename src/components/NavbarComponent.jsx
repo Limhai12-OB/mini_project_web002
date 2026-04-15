@@ -12,7 +12,7 @@ const centerLinks = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Shop", badge: "NEW" },
   { href: "/manage-products", label: "Manage Products" },
-  { href: "/orders", label: "Orders" },
+  { href: "/cart", label: "Orders" },
 ];
 
 function CartBagIcon({ className }) {
@@ -40,7 +40,7 @@ function linkActive(pathname, label) {
   if (label === "Shop")
     return pathname === "/products" || pathname.startsWith("/products/");
   if (label === "Categories") return pathname === "/categories";
-  if (label === "Orders") return pathname === "/orders";
+  if (label === "Orders") return pathname === "/cart";
   if (label === "Manage Products") return pathname === "/manage-products";
   return false;
 }
@@ -222,6 +222,7 @@ export default function NavbarComponent() {
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
             > 
+              Cart
             </Link>
           </div>
         </div>

@@ -33,8 +33,8 @@ export default async function FooterComponent() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/categories" className="hover:text-gray-900">
-                    Categories
+                  <Link href="/products" className="hover:text-gray-900">
+                    Shop by category
                   </Link>
                 </li>
                 <li>
@@ -43,8 +43,8 @@ export default async function FooterComponent() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/orders" className="hover:text-gray-900">
-                    Orders
+                  <Link href="/cart" className="hover:text-gray-900">
+                    Checkout
                   </Link>
                 </li>
               </ul>

@@ -20,6 +20,9 @@ export async function getBestSelling() {
     });
 
     if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        return [];
+      }
       console.error(`Fetch failed with status: ${res.status}`);
       return [];
     }

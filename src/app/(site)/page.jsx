@@ -110,17 +110,17 @@ export default async function Home() {
         <p>
           Explore{" "}
           <Link
-            href="/categories"
+            href="/products"
             className="font-medium text-gray-900 underline-offset-2 hover:underline"
           >
-            {categories.length} categories
+            {categories.length} categories in our catalog
           </Link>{" "}
-          and{" "}
+          and try the{" "}
           <Link
-            href="/orders"
+            href="/cart"
             className="font-medium text-gray-900 underline-offset-2 hover:underline"
           >
-            sample orders
+            cart flow
           </Link>{" "}
           from the same project.
         </p>

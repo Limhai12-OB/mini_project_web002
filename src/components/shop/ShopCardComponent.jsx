@@ -2,17 +2,25 @@ import Link from "next/link";
 import Image from "next/image";
 import { StarRow } from "../ProductCardComponent";
 
+function isValidImageUrl(value) {
+  if (value == null) return false;
+  const s = String(value).trim();
+  if (!s || s.toLowerCase() === "string") return false;
+  if (s.startsWith("/")) return true;
+  return /^https?:\/\//i.test(s);
+}
+
 export default function ShopCardComponent({ product }) {
   const { price, name, productId, description, imageUrl } = product;
+  const source = isValidImageUrl(imageUrl)
+    ? imageUrl
+    : "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800";
 
   return (
       <article className="group w-full flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
         <div className="relative aspect-square overflow-hidden">
           <Image
-            src={
-              imageUrl ||
-              "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800"
-            }
+            src={source}
             alt={name}
             fill
             sizes="(max-width: 768px) 100vw, 300px"
